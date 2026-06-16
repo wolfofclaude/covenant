@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+const isDev = process.env.NODE_ENV !== 'production'
+
 export function proxy(request: NextRequest) {
   const response = NextResponse.next()
 
@@ -12,11 +14,13 @@ export function proxy(request: NextRequest) {
     'Content-Security-Policy',
     [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline'",
+      // React's dev build relies on eval() for debugging; production stays strict.
+      `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}`,
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https:",
-      "connect-src 'self'",
+      // Allow the dev HMR websocket alongside same-origin connections.
+      `connect-src 'self'${isDev ? ' ws: wss:' : ''}`,
       "frame-ancestors 'none'",
     ].join('; ')
   )

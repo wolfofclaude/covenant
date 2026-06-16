@@ -1,12 +1,21 @@
 import type { Metadata } from 'next'
-import { Source_Sans_3 } from 'next/font/google'
+import { Source_Sans_3, Source_Serif_4 } from 'next/font/google'
 import StructuredData from '@/components/StructuredData'
+import CookieConsent from '@/components/CookieConsent'
 import './globals.css'
 
 const sourceSans = Source_Sans_3({
   subsets: ['latin'],
   weight: ['400', '600', '700'],
   variable: '--font-source-sans',
+  display: 'swap',
+})
+
+// Display/heading serif — matches Blanket's --font-landing-serif (Source Serif 4)
+const sourceSerif = Source_Serif_4({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  variable: '--font-source-serif',
   display: 'swap',
 })
 
@@ -54,14 +63,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={sourceSans.variable}>
+    <html lang="en" className={`${sourceSans.variable} ${sourceSerif.variable}`}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body>
+      {/* suppressHydrationWarning: browser extensions (e.g. ColorZilla's
+          cz-shortcut-listen) mutate <body> before hydration; this ignores
+          those extension-injected attribute diffs only. */}
+      <body suppressHydrationWarning>
         <StructuredData />
         {children}
+        <CookieConsent />
       </body>
     </html>
   )

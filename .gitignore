@@ -28,3 +28,16 @@ yarn-error.log*
 # local
 .DS_Store
 *.pem
+
+# design reference screenshots (kept locally, not part of source)
+/screenshot/
+/form/
+
+# visual-check scratch scripts / artifacts
+/*.png
+check*.mjs
+shot*.mjs
+*crop*.mjs
+
+# typescript incremental build cache
+*.tsbuildinfo

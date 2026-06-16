@@ -14,12 +14,14 @@ html {
 
 @layer base {
   body {
-    @apply text-brand-navy antialiased;
+    /* Blanket sets a 15px base on a warm-near-black ink color */
+    @apply text-brand-navy antialiased text-[15px];
   }
+  /* Display headings use the serif (Source Serif 4), matching Blanket */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold tracking-tight;
+    @apply font-serif font-semibold tracking-tight;
   }
-  /* Focus ring standard */
+  /* Focus ring — warm ink */
   :focus-visible {
     @apply outline-none ring-2 ring-brand-navy ring-offset-2;
   }
@@ -29,15 +31,14 @@ html {
   .section-padding { @apply py-20 lg:py-28; }
   .container-width { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
 
-  /* Button variants */
+  /* Button variants — Blanket uses solid black ink pills */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-brand-navy text-white font-semibold rounded-full
-           hover:bg-brand-navy-mid active:scale-95 transition-all duration-200 text-[15px] tracking-wide
-           shadow-md shadow-brand-navy/20;
+           hover:bg-brand-navy-mid active:scale-95 transition-all duration-200 text-[15px] tracking-wide;
   }
   .btn-secondary {
     @apply inline-flex items-center justify-center px-7 py-3.5 bg-white text-brand-navy font-medium rounded-full
-           hover:bg-gray-50 active:scale-95 transition-all duration-200 text-[15px]
+           hover:bg-brand-cream active:scale-95 transition-all duration-200 text-[15px]
            border border-gray-200 shadow-sm;
   }
   .btn-ghost {
@@ -45,9 +46,9 @@ html {
            hover:bg-brand-navy/5 active:scale-95 transition-all duration-200 text-[14px];
   }
 
-  /* Card */
+  /* Card — Blanket uses a generous 24px surface radius */
   .card {
-    @apply rounded-2xl border border-gray-100 bg-white shadow-sm;
+    @apply rounded-brand border border-gray-100 bg-white shadow-sm;
   }
 
   /* Link hover underline */

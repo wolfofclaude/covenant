@@ -10,22 +10,50 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          navy:        '#14264A',
-          'navy-mid':  '#1E3A6E',
-          'navy-light':'#2A5298',
-          cream:       '#FAF8F5',
-          'cream-dark':'#F0EDE6',
-          gold:        '#B8924A',
-          muted:       '#64748B',
+          // Dark / ink — Blanket uses a warm near-black (--warm-black #1a1816)
+          navy:        '#1A1816',
+          'navy-mid':  '#2B2826',
+          'navy-light':'#48433F',
+          // Warm off-white background (--cream / --chrome-light #f9f8f6)
+          cream:       '#F9F8F6',
+          'cream-dark':'#F0EDE9',
+          // Brand accent — Blanket's primary is blue, not gold (--accent-blue)
+          blue:        '#1E6FBA',
+          'blue-strong':'#185D9E',
+          // `gold` retained as an alias of the accent so legacy usages stay on-brand
+          gold:        '#1E6FBA',
+          muted:       '#6A7282',
+          // Warm footer tone (slightly deeper than cream)
+          'cream-warm':'#ECE9E3',
         },
+        // Muted pastel testimonial cards (Blanket palette)
+        pastel: {
+          sage:  '#DDE4D8',
+          tan:   '#EFE7DA',
+          blue:  '#D8E3EC',
+          stone: '#E7E4DD',
+          rose:  '#EEE1DC',
+        },
+      },
+      borderRadius: {
+        // Blanket's large card/surface radius (--border-radius: 24px)
+        brand: '24px',
       },
       fontFamily: {
         sans: [
+          'var(--font-source-sans)',
           '"Source Sans 3"',
-          '"Source Sans 3 Fallback"',
           'ui-sans-serif',
           'system-ui',
           'sans-serif',
+        ],
+        // Display/heading serif — matches Blanket's --font-landing-serif
+        serif: [
+          'var(--font-source-serif)',
+          '"Source Serif 4"',
+          'ui-serif',
+          'Georgia',
+          'serif',
         ],
       },
       fontSize: {
@@ -44,6 +72,7 @@ const config: Config = {
         'glow':       'glow 2s ease-in-out infinite',
         'shimmer':    'shimmer 2s linear infinite',
         'bounce-soft':'bounceSoft 2s ease-in-out infinite',
+        'marquee':    'marquee 55s linear infinite',
       },
       keyframes: {
         fadeIn:       { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
@@ -54,6 +83,7 @@ const config: Config = {
         glow:         { '0%, 100%': { boxShadow: '0 0 0 0 rgba(34,197,94,0.6)' }, '50%': { boxShadow: '0 0 0 6px rgba(34,197,94,0)' } },
         shimmer:      { '0%': { backgroundPosition: '-200% center' }, '100%': { backgroundPosition: '200% center' } },
         bounceSoft:   { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-4px)' } },
+        marquee:      { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
       },
     },
   },

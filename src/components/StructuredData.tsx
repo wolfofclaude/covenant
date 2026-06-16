@@ -80,7 +80,7 @@ function buildSchemas() {
       { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
       { '@type': 'ListItem', position: 2, name: 'How it works', item: `${BASE_URL}/#how-it-works` },
       { '@type': 'ListItem', position: 3, name: 'Pricing', item: `${BASE_URL}/#pricing` },
-      { '@type': 'ListItem', position: 4, name: 'FAQs', item: `${BASE_URL}/#faqs` },
+      { '@type': 'ListItem', position: 4, name: 'FAQs', item: `${BASE_URL}/help` },
     ],
   }
 
