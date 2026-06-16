@@ -1,95 +1,91 @@
-import SectionHeader from '@/components/ui/SectionHeader'
-import { PLANS, ADDONS } from '@/constants/data'
+type Feature = {
+  title: string
+  description: string
+}
+
+const features: Feature[] = [
+  {
+    title: 'Assigned expert',
+    description: 'A dedicated Covenant expert from start to registration',
+  },
+  {
+    title: 'English & Arabic',
+    description: 'Prepared in both languages for the ADJD process',
+  },
+  {
+    title: 'Court submission',
+    description: 'Guidance through ADJD or ADGM submission and registration',
+  },
+  {
+    title: 'Protection beyond the UAE',
+    description:
+      'Add a coordinated power of attorney or a home-country will if your situation calls for it.',
+  },
+  {
+    title: 'Assets and wishes',
+    description: 'Money, property, belongings and personal instructions',
+  },
+  {
+    title: 'Guardianship',
+    description: 'Name who should care for your children',
+  },
+  {
+    title: 'Executors',
+    description: 'Choose who should handle your estate',
+  },
+  {
+    title: 'Mirror wills for couples',
+    description: 'Two coordinated wills for AED 1,199',
+  },
+  {
+    title: 'Vault & Capsules',
+    description: 'Store documents and share key instructions securely',
+  },
+]
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="bg-white section-padding">
+    <section id="pricing" className="bg-brand-cream section-padding">
       <div className="container-width">
-        <SectionHeader
-          eyebrow="Transparent pricing"
-          heading="Simple, honest fees"
-          subtext="No hidden charges. Court fees are listed separately so you always know exactly what you'll pay."
-          align="center"
-        />
+        <div className="text-center">
+          <p className="text-[13px] text-gray-500">
+            Your UAE will covers the essentials.
+          </p>
 
-        {/* Plan cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
-          {PLANS.map((plan) => (
+          <h2 className="mx-auto mt-4 max-w-3xl font-serif text-4xl font-medium leading-tight text-brand-navy sm:text-5xl">
+            What used to cost thousands now starts at AED 799*.
+          </h2>
+        </div>
+
+        <dl className="mx-auto mt-12 max-w-4xl overflow-hidden rounded-brand sm:mt-16">
+          {features.map((feature, index) => (
             <div
-              key={plan.name}
-              className={`relative rounded-2xl p-8 border flex flex-col transition-all duration-300 hover:-translate-y-1 ${
-                plan.popular
-                  ? 'bg-brand-navy text-white border-brand-navy shadow-xl shadow-brand-navy/25 hover:shadow-2xl hover:shadow-brand-navy/30'
-                  : 'bg-brand-cream border-gray-100 hover:shadow-lg hover:border-brand-navy/20'
+              key={feature.title}
+              className={`grid grid-cols-1 gap-1 px-6 py-5 sm:grid-cols-12 sm:gap-6 ${
+                index % 2 === 1 ? 'bg-black/[0.025]' : 'bg-transparent'
               }`}
             >
-              {plan.popular && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center px-4 py-1
-                                 bg-brand-gold text-white text-[12px] font-semibold rounded-full
-                                 animate-[fadeIn_0.4s_ease-out_forwards]">
-                  Most popular
-                </span>
-              )}
-
-              <div className="mb-6">
-                <p className={`text-[14px] font-semibold mb-1 ${plan.popular ? 'text-brand-gold' : 'text-brand-muted'}`}>
-                  {plan.name}
-                </p>
-                <p className={`text-[36px] font-bold tracking-tight ${plan.popular ? 'text-white' : 'text-brand-navy'}`}>
-                  {plan.price}
-                </p>
-                <p className={`text-[13px] mt-1 ${plan.popular ? 'text-white/60' : 'text-gray-400'}`}>
-                  {plan.note}
-                </p>
-              </div>
-
-              <ul className="space-y-3 flex-1 mb-8" aria-label={`${plan.name} features`}>
-                {plan.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2.5">
-                    <svg
-                      aria-hidden="true"
-                      className={`w-4 h-4 mt-0.5 shrink-0 ${plan.popular ? 'text-brand-gold' : 'text-emerald-500'}`}
-                      fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className={`text-[14px] ${plan.popular ? 'text-white/85' : 'text-gray-600'}`}>{f}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <a
-                href="/start"
-                aria-label={`Select ${plan.name} plan`}
-                className={`w-full inline-flex items-center justify-center px-6 py-3 rounded-full text-[14px] font-medium
-                            transition-all duration-200 hover:scale-105 active:scale-95 ${
-                  plan.popular
-                    ? 'bg-white text-brand-navy hover:bg-gray-100'
-                    : 'bg-brand-navy text-white hover:bg-brand-navy-mid'
-                }`}
-              >
-                Start Your Will
-              </a>
+              <dt className="text-[15px] font-semibold text-brand-navy sm:col-span-5">
+                {feature.title}
+              </dt>
+              <dd className="text-[14px] leading-relaxed text-gray-500 sm:col-span-7">
+                {feature.description}
+              </dd>
             </div>
           ))}
+        </dl>
+
+        <div className="mt-12 text-center">
+          <a href="/start" className="btn-primary">
+            Start Your Will
+          </a>
         </div>
 
-        {/* Add-ons */}
-        <div className="bg-brand-cream rounded-2xl p-8 border border-gray-100">
-          <h3 className="text-[18px] font-semibold text-brand-navy mb-6">Additional services</h3>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {ADDONS.map((a) => (
-              <div key={a.name} className="rounded-xl border border-gray-100 bg-white p-5 hover:border-brand-navy/20 hover:shadow-sm transition-all duration-200">
-                <p className="text-[13px] text-gray-500 mb-1">{a.name}</p>
-                <p className="text-[20px] font-bold text-brand-navy">{a.price}</p>
-              </div>
-            ))}
-          </div>
-          <p className="mt-6 text-[12px] text-gray-400 leading-relaxed">
-            * Court fees are payable directly to UAE courts and are separate from Covenant fees.
-            Standard ADJD registration: AED 950 per will, AED 1,900 for mirror wills. ADGM notarisation: AED 570.
-          </p>
-        </div>
+        <p className="mx-auto mt-8 max-w-2xl text-center text-[12px] leading-relaxed text-gray-500">
+          *ADJD registration fee (AED 950, or AED 1,900 for mirror wills) is paid
+          separately to the court. Optional fast-track notarization via ADGM is AED 570
+          per will, depending on your situation.
+        </p>
       </div>
     </section>
   )

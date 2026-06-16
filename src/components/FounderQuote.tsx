@@ -1,30 +1,101 @@
+import Image from 'next/image'
+
+type AddOn = {
+  title: string
+  price: string
+  description: string
+}
+
+const ADD_ONS: AddOn[] = [
+  {
+    title: 'Home-country will',
+    price: 'From AED 499',
+    description:
+      'For property, accounts or other assets outside the UAE. UK and India available now, with more countries to come.',
+  },
+  {
+    title: 'Power of attorney',
+    price: 'AED 499',
+    description:
+      'Let someone you trust handle banking, healthcare or UAE admin if you are travelling, unavailable or unable to act yourself.',
+  },
+  {
+    title: 'Vault & Capsules',
+    price: 'Included',
+    description:
+      'Store your documents in one place and share key instructions with the right people.',
+  },
+]
+
 export default function FounderQuote() {
   return (
-    <section className="bg-brand-navy section-padding">
+    <section id="founder" className="bg-brand-cream section-padding">
       <div className="container-width">
-        <div className="max-w-3xl mx-auto text-center">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+          {/* LEFT: Founder quote */}
+          <figure className="max-w-md">
+            <span
+              aria-hidden="true"
+              className="block font-serif text-7xl leading-none text-brand-navy/25"
+            >
+              &ldquo;
+            </span>
 
-          <svg
-            aria-hidden="true"
-            className="w-12 h-12 text-brand-gold/50 mx-auto mb-8"
-            fill="currentColor" viewBox="0 0 32 32"
-          >
-            <path d="M10 8C6.686 8 4 10.686 4 14v10h10V14H7.172A5.172 5.172 0 0112 8h-2zm16 0c-3.314 0-6 2.686-6 6v10h10V14h-6.828A5.172 5.172 0 0128 8h-2z" />
-          </svg>
+            <blockquote className="mt-2 font-serif text-2xl leading-snug text-brand-navy lg:text-3xl">
+              A UAE will covers your life here &mdash; for many people, that&rsquo;s
+              all they need. If your life spans borders, we&rsquo;ll tell you
+              what&rsquo;s worth adding: a will for assets back home, a power of
+              attorney, or nothing at all.
+            </blockquote>
 
-          <blockquote className="text-[22px] lg:text-[28px] font-semibold text-white leading-snug mb-8">
-            We started Covenant because we saw expat families in the UAE making a life here without the
-            legal protection they deserve. Writing a will shouldn&apos;t be complicated or expensive.
-          </blockquote>
+            <figcaption className="mt-8 flex items-center gap-3">
+              <Image
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
+                alt="Covenant founder"
+                width={40}
+                height={40}
+                className="h-10 w-10 rounded-full object-cover"
+              />
+              <span>
+                <span className="text-[14px] font-semibold text-brand-navy">
+                  James Whitfield
+                </span>{' '}
+                <span className="text-[13px] text-gray-500">Founder</span>
+              </span>
+            </figcaption>
+          </figure>
 
-          <div className="flex items-center justify-center gap-4">
-            <div className="w-14 h-14 rounded-full bg-brand-gold flex items-center justify-center text-brand-navy font-bold text-[18px] shrink-0">
-              C
-            </div>
-            <div className="text-left">
-              <p className="text-[15px] font-semibold text-white">Covenant Founders</p>
-              <p className="text-[13px] text-white/50">Dubai, UAE</p>
-            </div>
+          {/* RIGHT: Add-ons */}
+          <div>
+            <ul role="list">
+              {ADD_ONS.map((addOn, index) => (
+                <li
+                  key={addOn.title}
+                  className={
+                    index === 0
+                      ? 'py-6 first:pt-0'
+                      : 'border-t border-black/10 py-6'
+                  }
+                >
+                  <div className="flex items-baseline justify-between gap-4">
+                    <h3 className="font-semibold text-brand-navy">
+                      {addOn.title}
+                    </h3>
+                    <span className="shrink-0 text-[13px] text-gray-500">
+                      {addOn.price}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-[14px] leading-relaxed text-gray-500">
+                    {addOn.description}
+                  </p>
+                </li>
+              ))}
+            </ul>
+
+            <p className="mt-6 text-[12px] leading-relaxed text-gray-500">
+              POA notary fees are paid separately. UK and India wills are add-ons
+              to the UAE will journey.
+            </p>
           </div>
         </div>
       </div>

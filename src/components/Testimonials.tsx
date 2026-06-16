@@ -1,123 +1,83 @@
-'use client'
+/* ── Content (local consts — adapted for Covenant) ── */
 
-import SectionHeader from '@/components/ui/SectionHeader'
-import { useCarousel } from '@/hooks/useCarousel'
-import { TESTIMONIALS } from '@/constants/data'
+type QuoteItem = { kind: 'quote'; name: string; quote: string }
+type StatItem = { kind: 'stat' }
+type Item = QuoteItem | StatItem
 
-const VISIBLE = 3
-
-const avatarGradients = [
-  'from-brand-navy to-brand-navy-mid',
-  'from-brand-navy-mid to-brand-navy-light',
-  'from-[#1a4a7a] to-brand-navy',
-  'from-brand-navy to-[#0d1f3c]',
-  'from-[#1e3a6e] to-[#2a5298]',
-  'from-brand-navy-light to-brand-navy',
-  'from-[#14264A] to-[#1e3a6e]',
-  'from-[#0d1f3c] to-[#1e3a6e]',
+const TESTIMONIALS: QuoteItem[] = [
+  { kind: 'quote', name: 'Tom', quote: 'I love the service so far. Very relevant to many expats in the UAE.' },
+  { kind: 'quote', name: 'Michael', quote: 'The process was very straightforward. I would refer Covenant to my friends.' },
+  { kind: 'quote', name: 'Ken', quote: 'Great Service and Great Value.' },
+  { kind: 'quote', name: 'Nori', quote: 'Very fast and efficient thanks to them.' },
+  { kind: 'quote', name: 'Beat', quote: 'I just had the session with ADJD via Webex. It is all done now.' },
+  { kind: 'quote', name: 'Phil', quote: 'Smooth, responsive, efficient and cost effective in comparison with alternative services.' },
+  { kind: 'quote', name: 'Alan', quote: 'The convenience and cost for our situation made it attractive. The process has been very easy.' },
+  { kind: 'quote', name: 'Jon', quote: 'I reviewed the online market and Covenant came out the best service.' },
 ]
 
+/* Build the strip with one black stat card inserted at the third position. */
+const ITEMS: Item[] = [
+  TESTIMONIALS[0],
+  TESTIMONIALS[1],
+  { kind: 'stat' },
+  ...TESTIMONIALS.slice(2),
+]
+
+/* Muted pastel backgrounds cycle through the configured palette, then repeat. */
+const PASTELS = ['bg-pastel-sage', 'bg-pastel-tan', 'bg-pastel-blue', 'bg-pastel-stone', 'bg-pastel-rose'] as const
+
+/* Every card shares one fixed footprint so the strip is perfectly uniform.
+   The trailing margin (instead of a flex gap) makes the marquee's -50% shift exact. */
+const CARD_SIZE = 'h-[360px] w-[280px] mr-5 shrink-0 rounded-brand'
+
+function Card({ item, pastel }: { item: Item; pastel: string }) {
+  if (item.kind === 'stat') {
+    return (
+      <div className={`flex flex-col justify-center bg-brand-navy p-8 text-center ${CARD_SIZE}`}>
+        <p className="font-serif text-6xl font-semibold leading-none text-white">2,000+</p>
+        <p className="mt-4 text-sm leading-relaxed text-white/70">UAE wills created through Covenant</p>
+      </div>
+    )
+  }
+  return (
+    <figure className={`flex flex-col p-6 lg:p-8 ${CARD_SIZE} ${pastel}`}>
+      <span aria-hidden="true" className="font-serif text-5xl leading-none text-brand-navy/30">
+        &ldquo;
+      </span>
+      <blockquote className="mt-3 flex-1 overflow-hidden font-serif text-[16px] leading-snug text-brand-navy lg:text-[18px]">
+        {item.quote}
+      </blockquote>
+      <figcaption className="mt-6 text-sm text-gray-500">{item.name}</figcaption>
+    </figure>
+  )
+}
+
+/* ── Section ── */
+
 export default function Testimonials() {
-  const { start, prev, next, goTo, canPrev, canNext } = useCarousel(TESTIMONIALS.length, VISIBLE)
-  const visible = TESTIMONIALS.slice(start, start + VISIBLE)
+  // Pre-assign a pastel to each non-stat card so the colour order is stable.
+  let pastelIndex = 0
+  const cards = ITEMS.map((item) => ({
+    item,
+    pastel: item.kind === 'quote' ? PASTELS[pastelIndex++ % PASTELS.length] : '',
+  }))
 
   return (
-    <section id="testimonials" className="bg-brand-cream section-padding overflow-hidden">
+    <section id="testimonials" className="bg-brand-cream section-padding">
       <div className="container-width">
+        <h2 className="max-w-md font-serif text-4xl font-semibold leading-tight tracking-tight text-brand-navy lg:text-5xl">
+          Trusted by people just like you.
+        </h2>
+      </div>
 
-        {/* Header + nav */}
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12">
-          <SectionHeader
-            eyebrow="Client stories"
-            heading="What our clients say"
-          />
-
-          <div className="flex items-center gap-3 shrink-0 pb-14">
-            <button
-              onClick={prev}
-              disabled={!canPrev}
-              aria-label="Previous testimonials"
-              className="w-11 h-11 rounded-full border border-gray-200 flex items-center justify-center text-brand-navy
-                         hover:bg-brand-navy hover:text-white hover:border-brand-navy
-                         disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
-            >
-              <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <button
-              onClick={next}
-              disabled={!canNext}
-              aria-label="Next testimonials"
-              className="w-11 h-11 rounded-full border border-gray-200 flex items-center justify-center text-brand-navy
-                         hover:bg-brand-navy hover:text-white hover:border-brand-navy
-                         disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
-            >
-              <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Cards */}
-        <div
-          aria-live="polite"
-          aria-atomic="true"
-          aria-label={`Testimonials ${start + 1} to ${Math.min(start + VISIBLE, TESTIMONIALS.length)} of ${TESTIMONIALS.length}`}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
-          {visible.map((t, i) => (
-            <article
-              key={`${t.name}-${start + i}`}
-              className="bg-white rounded-2xl p-7 border border-gray-100 shadow-sm flex flex-col gap-5
-                         animate-[scaleIn_0.2s_ease-out_forwards]"
-            >
-              {/* Stars */}
-              <div className="flex gap-0.5" aria-label="5 out of 5 stars">
-                {Array.from({ length: 5 }).map((_, si) => (
-                  <svg key={si} aria-hidden="true" className="w-5 h-5 text-brand-gold" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-
-              {/* Quote */}
-              <blockquote className="text-[15px] text-gray-600 leading-relaxed flex-1">
-                &ldquo;{t.quote}&rdquo;
-              </blockquote>
-
-              {/* Attribution */}
-              <footer className="flex items-center gap-3 pt-1 border-t border-gray-50">
-                <div
-                  aria-hidden="true"
-                  className={`w-10 h-10 rounded-full bg-gradient-to-br ${
-                    avatarGradients[(start + i) % avatarGradients.length]
-                  } flex items-center justify-center text-white text-[13px] font-bold shrink-0`}
-                >
-                  {t.name[0]}
-                </div>
-                <div>
-                  <p className="text-[14px] font-semibold text-brand-navy">{t.name}</p>
-                  <p className="text-[12px] text-gray-400">{t.detail}</p>
-                </div>
-              </footer>
-            </article>
+      {/* Continuous marquee — one track holding two copies loops seamlessly. Pauses on hover. */}
+      <div className="group mt-12 overflow-hidden" role="region" aria-label="Client testimonials">
+        <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none">
+          {cards.map(({ item, pastel }, i) => (
+            <Card key={`a-${i}`} item={item} pastel={pastel} />
           ))}
-        </div>
-
-        {/* Dots */}
-        <div className="flex justify-center gap-2 mt-8" aria-label="Testimonial navigation">
-          {Array.from({ length: TESTIMONIALS.length - VISIBLE + 1 }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => goTo(i)}
-              aria-label={`Go to testimonial group ${i + 1}`}
-              aria-current={i === start ? 'true' : undefined}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === start ? 'w-6 bg-brand-navy' : 'w-1.5 bg-gray-300 hover:bg-gray-400'
-              }`}
-            />
+          {cards.map(({ item, pastel }, i) => (
+            <Card key={`b-${i}`} item={item} pastel={pastel} />
           ))}
         </div>
       </div>

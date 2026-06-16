@@ -1,15 +1,4 @@
-export interface Service {
-  icon: React.ReactNode
-  title: string
-  description: string
-  href?: string
-}
-
-export interface Step {
-  number: string
-  title: string
-  body: string
-}
+// Types backing the SEO structured data (see components/StructuredData.tsx).
 
 export interface Plan {
   name: string
@@ -19,24 +8,10 @@ export interface Plan {
   features: string[]
 }
 
-export interface Addon {
-  name: string
-  price: string
-}
-
 export interface Testimonial {
   quote: string
   name: string
   detail: string
-}
-
-export interface NavLink {
-  label: string
-  href: string
-}
-
-export interface FooterLinkGroup {
-  [group: string]: Array<{ label: string; href: string }>
 }
 
 export interface FAQ {
