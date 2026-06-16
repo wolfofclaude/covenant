@@ -69,7 +69,6 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-16 flex flex-col gap-2 border-t border-black/10 pt-8 text-[13px] text-gray-500">
-          <p>License No. Coming soon</p>
           <p>© 2026 Covenant. All rights reserved.</p>
         </div>
       </div>

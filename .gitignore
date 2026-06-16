@@ -41,3 +41,10 @@ shot*.mjs
 
 # typescript incremental build cache
 *.tsbuildinfo
+
+# local dev database (SQLite)
+/prisma/*.db
+/prisma/*.db-journal
+
+# dev email output (written by the dev mailer)
+/mail/

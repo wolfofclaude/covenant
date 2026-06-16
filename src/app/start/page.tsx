@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { recommend } from '@/lib/recommendation'
+import type { QuestionnaireAnswers } from '@/types'
 
 /* ── Conversational flow (chat-style will questionnaire) ── */
 
@@ -164,6 +166,20 @@ export default function StartPage() {
   useEffect(() => {
     if (revealed) scrollToBottom()
   }, [revealed, scrollToBottom])
+
+  // Once the questionnaire is complete, persist the answers as a draft will
+  // application (anonymous, cookie-tied) so the dashboard can pick them up.
+  const postedRef = useRef(false)
+  useEffect(() => {
+    if (done && !postedRef.current) {
+      postedRef.current = true
+      fetch('/api/applications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ answers }),
+      }).catch(() => {})
+    }
+  }, [done, answers])
 
   const answer = (id: string, value: string) => {
     setAnswers((a) => ({ ...a, [id]: value }))
@@ -327,20 +343,14 @@ export default function StartPage() {
               </div>
               <div className="mt-3">
                 <Streamed
-                  lines={[
-                    `Thanks${answers.name ? `, ${answers.name}` : ''}. Based on what you've shared, a registered UAE will is the right foundation${
-                      answers.abroad === 'Yes'
-                        ? ', and a coordinated home-country will is worth adding for your assets abroad'
-                        : ''
-                    }. We've saved your answers — create your account to pick up where you left off.`,
-                  ]}
+                  lines={[recommend(answers as QuestionnaireAnswers).closing]}
                   onDone={onStreamDone}
                   onTick={scrollToBottom}
                 />
                 {revealed && (
                   <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                    <a href="/auth/sign-in" className="btn-primary">
-                      Create my account
+                    <a href="/dashboard" className="btn-primary">
+                      See my recommendation
                     </a>
                     <a
                       href="#contact"

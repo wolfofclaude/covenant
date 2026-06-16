@@ -34,8 +34,8 @@ function Card({ item, pastel }: { item: Item; pastel: string }) {
   if (item.kind === 'stat') {
     return (
       <div className={`flex flex-col justify-center bg-brand-navy p-8 text-center ${CARD_SIZE}`}>
-        <p className="font-serif text-6xl font-semibold leading-none text-white">2,000+</p>
-        <p className="mt-4 text-sm leading-relaxed text-white/70">UAE wills created through Covenant</p>
+        <p className="font-serif text-5xl font-semibold leading-none text-white">Court-ready</p>
+        <p className="mt-4 text-sm leading-relaxed text-white/70">Wills drafted and registered with the UAE courts</p>
       </div>
     )
   }

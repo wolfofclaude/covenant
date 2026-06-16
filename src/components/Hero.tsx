@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 const HEADLINE_LINES = ['Make your', 'will online.'] as const
 const SUBTEXT = 'Protect your family, assets and wishes in the UAE and beyond.'
-const TRUST_LABEL = '2,000+ UAE wills created'
+const TRUST_LABEL = 'ADJD & DIFC court registration'
 
 export default function Hero() {
   return (

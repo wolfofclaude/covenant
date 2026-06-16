@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { signIn } from 'next-auth/react'
 
-/* NOTE: auth is not wired to a backend yet — these handlers are UI placeholders. */
+/* Google sign-in is live (Auth.js). UAE Pass and email/password are still placeholders. */
 
 function GoogleIcon() {
   return (
@@ -22,6 +23,21 @@ const socialBtn =
 export default function SignInForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault()
+    setError('')
+    setBusy(true)
+    const res = await signIn('credentials', { email, password, redirect: false })
+    setBusy(false)
+    if (res?.error) {
+      setError('Incorrect email or password.')
+      return
+    }
+    window.location.href = '/dashboard'
+  }
 
   return (
     <div>
@@ -32,7 +48,11 @@ export default function SignInForm() {
 
       {/* Social / UAE Pass */}
       <div className="mt-8 space-y-3">
-        <button type="button" className={socialBtn} onClick={() => { /* TODO: Google OAuth */ }}>
+        <button
+          type="button"
+          className={socialBtn}
+          onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+        >
           <GoogleIcon />
           Continue with Google
         </button>
@@ -51,13 +71,7 @@ export default function SignInForm() {
       </div>
 
       {/* Email / password */}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          /* TODO: email/password auth */
-        }}
-        className="space-y-4"
-      >
+      <form onSubmit={handleLogin} className="space-y-4">
         <div>
           <label htmlFor="email" className="mb-1.5 block text-[13px] font-medium text-brand-navy">
             Email
@@ -95,15 +109,17 @@ export default function SignInForm() {
           />
         </div>
 
-        <button type="submit" className="btn-primary w-full">
-          Log in
+        {error && <p className="text-[13px] text-red-600">{error}</p>}
+
+        <button type="submit" disabled={busy} className="btn-primary w-full disabled:opacity-60">
+          {busy ? 'Logging in…' : 'Log in'}
         </button>
       </form>
 
       <p className="mt-8 text-center text-[14px] text-gray-500">
         New to Covenant?{' '}
-        <Link href="/start" className="font-medium text-brand-navy underline underline-offset-2 hover:text-brand-navy-mid">
-          Start your will
+        <Link href="/auth/sign-up" className="font-medium text-brand-navy underline underline-offset-2 hover:text-brand-navy-mid">
+          Create an account
         </Link>
       </p>
     </div>

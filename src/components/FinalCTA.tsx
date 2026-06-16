@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 const CTA = {
   heading: 'Ready to get started?',
-  subtext: 'Join 2,000+ people who have chosen Covenant to protect what matters.',
+  subtext: 'Protect your family, your assets and your wishes — in the UAE and beyond.',
   primary: { label: 'Start Your Will', href: '/start' },
   image: {
     src: 'https://images.unsplash.com/photo-1531983412531-1f49a365ffed?auto=format&fit=crop&w=1920&q=80',

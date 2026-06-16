@@ -1,0 +1,121 @@
+// Covenant data model.
+// Dev uses SQLite (free, local, zero-setup). For production this becomes a
+// managed Postgres in a UAE region — change `provider` to "postgresql" and
+// point DATABASE_URL at it. The schema is kept portable: no native enums,
+// no scalar lists, JSON stored as text strings (parsed in the app layer).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model WillApplication {
+  id           String   @id @default(cuid())
+  // Anonymous draft identifier (httpOnly cookie) until the user creates an account.
+  draftToken   String   @unique
+  // Set once an account exists and the draft is claimed.
+  userId       String?
+  user         User?    @relation(fields: [userId], references: [id])
+
+  jurisdiction String   @default("ADJD") // WillJurisdiction
+  status       String   @default("draft") // WillStatus
+
+  // JSON-encoded QuestionnaireAnswers and Recommendation (see src/types).
+  answers        String  @default("{}")
+  recommendation String?
+  // JSON-encoded WillDetails (testator + executor) gathered in the full intake.
+  details        String?
+
+  beneficiaries Beneficiary[]
+  guardians     Guardian[]
+  payments      Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Beneficiary {
+  id            String          @id @default(cuid())
+  application   WillApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId String
+  fullName      String
+  relationship  String
+  sharePercent  Int             @default(0)
+}
+
+model Guardian {
+  id            String          @id @default(cuid())
+  application   WillApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId String
+  fullName      String
+  relationship  String
+  kind          String          @default("permanent") // "interim" | "permanent"
+}
+
+model Payment {
+  id            String          @id @default(cuid())
+  application   WillApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId String
+  amountFils    Int             // service fee in fils (AED * 100)
+  govFeeFils    Int             // government registration fee, passed through at cost
+  currency      String          @default("AED")
+  status        String          @default("pending") // "pending" | "paid" | "refunded"
+  provider      String          @default("demo")    // "ziina" | "demo"
+  providerRef   String?         // Ziina payment_intent id
+  createdAt     DateTime        @default(now())
+}
+
+// ── Auth.js (NextAuth) adapter models ──
+// Standard schema required by @auth/prisma-adapter. Portable to Postgres as-is.
+
+model User {
+  id            String            @id @default(cuid())
+  name          String?
+  email         String?           @unique
+  emailVerified DateTime?
+  image         String?
+  // Set for email/password accounts; null for OAuth-only users.
+  passwordHash  String?
+  accounts      Account[]
+  sessions      Session[]
+  applications  WillApplication[]
+  createdAt     DateTime          @default(now())
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
