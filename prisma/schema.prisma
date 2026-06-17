@@ -1,15 +1,14 @@
-// Covenant data model.
-// Dev uses SQLite (free, local, zero-setup). For production this becomes a
-// managed Postgres in a UAE region — change `provider` to "postgresql" and
-// point DATABASE_URL at it. The schema is kept portable: no native enums,
-// no scalar lists, JSON stored as text strings (parsed in the app layer).
+// Covenant data model — PostgreSQL.
+// Local dev runs Postgres via docker-compose (see docker-compose.yml);
+// production uses a managed Postgres (DO Managed DB now; a UAE-region
+// Postgres at launch). Same DATABASE_URL contract either way.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -118,4 +117,20 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Article {
+  id              String    @id @default(cuid())
+  slug            String    @unique
+  title           String
+  excerpt         String
+  metaDescription String
+  bodyMarkdown    String
+  faq             String    @default("[]") // JSON: [{ q, a }]
+  tags            String    @default("[]") // JSON: string[]
+  author          String    @default("The Covenant Team")
+  status          String    @default("draft") // "draft" | "published"
+  publishedAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }

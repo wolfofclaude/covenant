@@ -10,6 +10,7 @@ const FOOTER_LINKS: ReadonlyArray<{
     links: [
       { label: 'Individuals', href: '/#services' },
       { label: 'Pricing', href: '/#pricing' },
+      { label: 'Guides', href: '/blog' },
       { label: 'Contact', href: '/help' },
     ],
   },

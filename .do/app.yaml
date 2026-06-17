@@ -1,0 +1,63 @@
+# DigitalOcean App Platform spec for Covenant.
+#
+# How to use:
+#   1. In DO: Create App → GitHub → wolfofclaude/covenant, branch feature/covenant-site-build.
+#      (Or import this file: it defines the service, a dev Postgres, and a migration job.)
+#   2. Set INSTANCE COUNT to 1 (not 2 — that's what made it $24).
+#   3. Add the SECRET env values in the dashboard: AUTH_SECRET (run: openssl rand -base64 32),
+#      TOGETHER_API_KEY, and later ZIINA_API_KEY / RESEND_API_KEY / AUTH_GOOGLE_* .
+#   4. Deploy. The pre-deploy job runs `prisma db push` to create tables.
+name: covenant
+region: fra
+services:
+  - name: web
+    github:
+      repo: wolfofclaude/covenant
+      branch: feature/covenant-site-build
+      deploy_on_push: true
+    source_dir: /
+    environment_slug: node-js
+    build_command: npx prisma generate && npm run build
+    run_command: npm start
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: basic-xs
+    envs:
+      - key: DATABASE_URL
+        scope: RUN_AND_BUILD_TIME
+        value: ${covenant-db.DATABASE_URL}
+      - key: NEXT_PUBLIC_APP_URL
+        scope: RUN_AND_BUILD_TIME
+        value: ${APP_URL}
+      - key: AUTH_TRUST_HOST
+        scope: RUN_TIME
+        value: "true"
+      - key: AUTH_SECRET
+        scope: RUN_TIME
+        type: SECRET
+        value: REPLACE_WITH_OPENSSL_RAND
+      - key: TOGETHER_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+        value: REPLACE_ME
+
+jobs:
+  - name: migrate
+    kind: PRE_DEPLOY
+    github:
+      repo: wolfofclaude/covenant
+      branch: feature/covenant-site-build
+    source_dir: /
+    environment_slug: node-js
+    run_command: npx prisma db push --skip-generate --accept-data-loss
+    instance_size_slug: basic-xxs
+    envs:
+      - key: DATABASE_URL
+        scope: RUN_TIME
+        value: ${covenant-db.DATABASE_URL}
+
+databases:
+  - name: covenant-db
+    engine: PG
+    version: "16"
+    production: false

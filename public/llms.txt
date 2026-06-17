@@ -1,0 +1,20 @@
+# Covenant
+
+> Covenant is an online estate-planning service for expats in the United Arab Emirates. It helps people create and register a UAE will (through the ADJD or DIFC), add a coordinated home-country will, set up power of attorney, appoint guardians for children, and store documents securely.
+
+Covenant is not a law firm and does not provide legal advice.
+
+## Key facts
+- Service area: United Arab Emirates (all seven emirates).
+- For: expats and cross-border families, including non-Muslims under Federal Decree-Law No. 41 of 2022.
+- Registration routes: ADJD (Abu Dhabi Judicial Department, fully online) and DIFC Wills Service Centre.
+- Pricing: UAE will from AED 799 (+ government fee); mirror wills for couples; add-ons for home-country wills and power of attorney.
+
+## Guides
+- [Guides / Blog](https://covenant.ae/blog): Articles on UAE wills, inheritance law, guardianship and estate planning for expats.
+
+## Key pages
+- [How it works](https://covenant.ae/#how-it-works)
+- [Pricing](https://covenant.ae/#pricing)
+- [Help & FAQs](https://covenant.ae/help)
+- [Start your will](https://covenant.ae/start)
